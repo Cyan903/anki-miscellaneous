@@ -1,0 +1,44 @@
+{{ FrontSide }}
+
+<hr />
+
+{{ #Date }}
+<h2 id="date">{{ Date }}</h2>
+<div>
+    <p id="until"></p>
+    <p id="datetime"></p>
+</div>
+{{ /Date }}
+
+<script>
+    function ord(n) {
+        if (n % 10 === 1 && n % 100 !== 11) return "st";
+        if (n % 10 === 2 && n % 100 !== 12) return "nd";
+        if (n % 10 === 3 && n % 100 !== 13) return "rd";
+
+        return "th";
+    }
+
+    {{ #Date }}
+    (() => {
+        const $ = document.querySelector.bind(document);
+        const cleaned = $("#date").innerHTML.trim().replace(/(\d+)(st|nd|rd|th)/i, "$1");
+
+        const [month, _day] = cleaned.split(" ");
+        const day = parseInt(_day, 10);
+
+        const now = new Date();
+        const currentYear = now.getFullYear();
+
+        // If the date already passed this year, use next year
+        let date = new Date(`${month} ${day}, ${currentYear}`);
+
+        if (date < now.setHours(0, 0, 0, 0)) {
+            date = new Date(`${month} ${day}, ${currentYear + 1}`);
+        }
+
+        $("#until").innerHTML = Math.ceil((date - new Date()) / (1000 * 60 * 60 * 24)) + " Days left";
+        $("#datetime").innerHTML = `${month} ${day}${ord(day)}, ${date.getFullYear()} (${date.getMonth() + 1}.${day})`;
+    })();
+    {{ /Date }}
+</script>

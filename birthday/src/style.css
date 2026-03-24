@@ -1,0 +1,14 @@
+.card {
+    font-family: arial;
+    font-size: 20px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 3em;
+}
+
+#datetime {
+    font-style: italic;
+    font-size: 0.8em;
+}
